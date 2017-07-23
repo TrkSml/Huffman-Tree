@@ -38,7 +38,6 @@ void insert_element(list** l,int el){
       current->val=el ;
       current->occ=1 ;
       current->next=NULL ;
-      //current->previous=NULL ;
       *l=current ;
       printf("First element added successfully ..  \n\n");
     }
@@ -54,10 +53,7 @@ void insert_element(list** l,int el){
             change=true ;
             break;
           }
-
-          //else{
           current=current->next ;
-          //}
         }
 
         if(el==current->val && !change){
@@ -71,7 +67,6 @@ void insert_element(list** l,int el){
             new_current->val=el;
             new_current->occ=1 ;
             new_current->next=NULL ;
-            //new_current->previous=current ;
             current->next=new_current;
 
 
@@ -104,9 +99,8 @@ void sort_list_by_values(list *l){
     list current=*l ;
 
     while(current->next ){
+        
       list crawler=current->next;
-      // printf("%p\n",crawler);
-      // printf("%p\n",current);
       while(crawler){
 
         if(crawler->occ<current->occ){
@@ -118,7 +112,6 @@ void sort_list_by_values(list *l){
         int tmp_val=crawler->val;
         crawler->val=current->val;
         current->val=tmp_val;
-
 
         }
         crawler=crawler->next ;
