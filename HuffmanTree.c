@@ -8,36 +8,28 @@
 #include <malloc.h>
 
 typedef struct Node{
+    
     int val ;
     int occ ;
     struct Node* next ;
-    //struct Node* previous;
-}Node;
 
-// typedef struct NodeBis{
-//     int occ ;
-//     struct NodeBis* next ;
-//     //struct Node* previous;
-// }NodeBis;
+}Node;
 
 typedef Node* list;
 
+typedef struct list{
+    
+    list head;
+    list tail;
+    
+}listht ; // list with head and tail
 
 typedef struct tree{
+    
   struct Node* root ;
   struct tree* left;
   struct tree* right;
 }Tree;
-
-
-typedef struct list{
-    list head;
-    list tail;
-    //struct list previous;
-}listht ; // list with head and tail
-
-
-//typedef list list_type;
 
 void insert_element(list** l,int el){
 
