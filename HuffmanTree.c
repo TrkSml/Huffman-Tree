@@ -12,17 +12,11 @@ typedef struct Node{
     int val ;
     int occ ;
     struct Node* next ;
-    //struct Node* previous;
+    
 }Node;
 
-// typedef struct NodeBis{
-//     int occ ;
-//     struct NodeBis* next ;
-//     //struct Node* previous;
-// }NodeBis;
 
 typedef Node* list;
-
 
 typedef struct tree{
   struct Node* root ;
@@ -34,7 +28,7 @@ typedef struct tree{
 typedef struct list{
     list head;
     list tail;
-    //struct list previous;
+
 }listht ; // list with head and tail
 
 typedef struct equival{
@@ -42,7 +36,7 @@ typedef struct equival{
   struct Tree* treeattr;
   struct equival* next;
 }Equival;
-//typedef list list_type;
+
 
 void insert_element(list** l,int el){
 
@@ -51,7 +45,6 @@ void insert_element(list** l,int el){
       current->val=el ;
       current->occ=1 ;
       current->next=NULL ;
-      //current->previous=NULL ;
       *l=current ;
       printf("First element added successfully ..  \n\n");
     }
@@ -68,9 +61,7 @@ void insert_element(list** l,int el){
             break;
           }
 
-          //else{
           current=current->next ;
-          //}
         }
 
         if(el==current->val && !change){
@@ -84,9 +75,7 @@ void insert_element(list** l,int el){
             new_current->val=el;
             new_current->occ=1 ;
             new_current->next=NULL ;
-            //new_current->previous=current ;
             current->next=new_current;
-
 
       }
     }
@@ -118,8 +107,6 @@ void sort_list_by_values(list *l){
 
     while(current->next ){
       list crawler=current->next;
-      // printf("%p\n",crawler);
-      // printf("%p\n",current);
       while(crawler){
 
         if(crawler->occ<current->occ){
@@ -479,9 +466,7 @@ void listHuffman(listht* lis,Tree** tree){
         sort_list_by_ref(lis);
 
         current=lis->head;
-      }
-
-
+        }
       }
 
      return *tree ;
@@ -508,27 +493,6 @@ char* appendCharToCharArray(char* array, char a)
 
     return ret;
 }
-
-// char* Huffman(Tree* tree,int el){
-//   static char* result"";
-//   static int el=0;
-//   if(tree){
-//
-//     if(tree->left->root->occ==el) result=appendCharToCharArray(result,'0');
-//     else
-//     if(tree->right->root->occ==el) result=appendCharToCharArray(result,'1');
-//
-//
-//   }
-
-  return result;
-  }
-
-
-
-
-}
-
 
 
 
