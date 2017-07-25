@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
+#include <string.h>
 
 typedef struct Node{
     int val ;
@@ -36,7 +37,11 @@ typedef struct list{
     //struct list previous;
 }listht ; // list with head and tail
 
-
+typedef struct equival{
+  struct Node* nodeattr;
+  struct Tree* treeattr;
+  struct equival* next;
+}Equival;
 //typedef list list_type;
 
 void insert_element(list** l,int el){
@@ -309,170 +314,138 @@ void suppress_Node(Node** main,Node* node){
   }
 }
 
-Tree* listHuffman(listht* lis,Tree* tree){
+Tree* find_tree(Equival* equiv, Node* node){
+  Equival* current=equiv ;
+  while(current->nodeattr!=node) current=current->next;
+
+  return current->treeattr;
+
+}
+
+void add_node_tree(Equival** equiv, Node* node,Tree* tree){
+
+   if(*equiv==NULL){
+     Equival* current=malloc(sizeof(Equival));
+     current->nodeattr=node;
+     current->treeattr=tree;
+     current->next=NULL;
+     *equiv=current;
+   }
+   else{
+   Equival* current=*equiv;
+   while(current->next)
+     current=current->next;
+
+
+   current->next=malloc(sizeof(Equival));
+   //current=current->next;
+   current->next->nodeattr=node;
+   current->next->treeattr=tree;
+   current->next->next=NULL;
+ }
+
+
+  // return equiv;
+
+}
+
+void displayEquiv(Equival* equiv){
+  Equival* current=equiv;
+  printf("%s\n","now displaying Equival ..");
+  if(current==NULL){
+
+    printf("%s\n","no elements .. ");
+  }
+  else if(!current->next){
+    printf("%s\n","only one element ..  ");
+    printf("[Node:adress %p|Tree:adress %p]\n",current->nodeattr,current->treeattr);
+
+
+  }
+else
+  {
+      printf("%s\n","many elements .. ");
+  while(current) {
+     printf("[Node:adress %p|Tree:adress %p]\n",current->nodeattr,current->treeattr);
+      current=current->next;
+
+    }
+   }
+
+}
+
+
+void listHuffman(listht* lis,Tree** tree){
     list current=lis->head;
+    Equival *equiv={0};
 
     while(current->next){
 
-        if(tree==NULL){
-        Node* first_to_add=current;
-        Node* second_to_add=current->next;
-
-        Tree* element_to_add1=malloc(sizeof(Tree));
-        Tree* element_to_add2=malloc(sizeof(Tree));
         Tree* big_tree=malloc(sizeof(Tree));
         Node* root=malloc(sizeof(Node));
 
-        element_to_add1->root=first_to_add;
-        element_to_add1->left=NULL;
-        element_to_add1->right=NULL;
+        if(!*tree){
 
-        element_to_add2->root=second_to_add;
-        element_to_add2->left=NULL;
-        element_to_add2->right=NULL;
+          Node* first_to_add=current;
+          Node* second_to_add=current->next;
 
-        big_tree->left=element_to_add1;
-        big_tree->right=element_to_add2;
+          Tree* element_to_add1=malloc(sizeof(Tree));
+          Tree* element_to_add2=malloc(sizeof(Tree));
 
-        root->val=0;
-        root->occ=big_tree->left->root->occ+big_tree->right->root->occ;
-        root->next=NULL;
+          element_to_add1->root=first_to_add;
+          element_to_add1->left=NULL;
+          element_to_add1->right=NULL;
 
-        big_tree->root=root;
-        tree=big_tree;
+          element_to_add2->root=second_to_add;
+          element_to_add2->left=NULL;
+          element_to_add2->right=NULL;
 
-        lis->tail->next=malloc(sizeof(Node));
-        lis->tail->next=root;
-        lis->tail=root;
-
-        suppress_Node(&lis->head,first_to_add);
-        suppress_Node(&lis->head,second_to_add);
-
-        sort_list_by_ref(lis);
-
-        DisplayListht(lis);
-        //displayList(lis->head);
-
-        current=lis->head;
-      }
-      else{
-        if(current->val==0){
-          if(current->next->val==0){
-            printf("%s\n","first case ..");
-
-            Tree* big_tree=malloc(sizeof(Tree));
-            Node* root=malloc(sizeof(Node));
+          big_tree->left=element_to_add1;
+          big_tree->right=element_to_add2;
 
 
-            big_tree->left=current;
-            big_tree->right=current->next;
+        }else
+        {
+          if(current->val==0){
+            if(current->next->val==0){
 
-            root->val=0;
-            root->occ=current->occ+current->next->occ;
-            root->next=NULL;
+              big_tree->left=find_tree(equiv,current);
+              big_tree->right=find_tree(equiv,current->next);
 
+          }else
+          {
 
-            big_tree->root=root;
-            tree=big_tree;
-
-            lis->tail->next=malloc(sizeof(Node));
-            lis->tail->next=root;
-            lis->tail=root;
-
-            suppress_Node(&lis->head,current);
-            suppress_Node(&lis->head,current->next);
-
-            sort_list_by_ref(lis);
-
-            //DisplayListht(lis);
-            displayList(lis->head);
-
-            current=lis->head;
-
-          }else{
-            printf("%s\n","second case ..");
-
-            Tree* big_tree=malloc(sizeof(Tree));
             Tree* first_to_add=malloc(sizeof(Tree));
-            Node* root=malloc(sizeof(Node));
 
             first_to_add->root=current->next;
             first_to_add->left=NULL;
             first_to_add->right=NULL;
 
-            big_tree->left=current;
+            big_tree->left=find_tree(equiv,current);
+            printf("fuck %d\n",big_tree->left->root->occ);
             big_tree->right=first_to_add;
 
-            root->val=0;
-            root->occ=current->occ+current->next->occ;
-            root->next=NULL;
-
-            big_tree->root=root;
-            tree=big_tree;
-
-            lis->tail->next=malloc(sizeof(Node));
-            lis->tail->next=root;
-            lis->tail=root;
-
-            suppress_Node(&lis->head,current);
-            suppress_Node(&lis->head,current->next);
-
-            sort_list_by_ref(lis);
-
-            //DisplayListht(lis);
-            displayList(lis->head);
-
-            current=lis->head;
-
           }
-        }else{
+        }else
+        {
           if(current->next->val==0){
 
-            printf("%s\n","third case ..");
-
-            Tree* big_tree=malloc(sizeof(Tree));
             Tree* first_to_add=malloc(sizeof(Tree));
-            Node* root=malloc(sizeof(Node));
 
             first_to_add->root=current;
             first_to_add->left=NULL;
             first_to_add->right=NULL;
 
             big_tree->left=first_to_add;
-            big_tree->right=current->next;
-
-            root->val=0;
-            root->occ=current->occ+current->next->occ;
-            root->next=NULL;
-
-            big_tree->root=root;
-            tree=big_tree;
-
-            lis->tail->next=malloc(sizeof(Node));
-            lis->tail->next=root;
-            lis->tail=root;
-
-            suppress_Node(&lis->head,current);
-            suppress_Node(&lis->head,current->next);
-
-            sort_list_by_ref(lis);
-
-            //DisplayListht(lis);
-            displayList(lis->head);
-
-            current=lis->head;
+            big_tree->right=find_tree(equiv,current->next);
 
           }else{
-
-            printf("%s\n","fourth case ..");
 
             Node* first_to_add=current;
             Node* second_to_add=current->next;
 
             Tree* element_to_add1=malloc(sizeof(Tree));
             Tree* element_to_add2=malloc(sizeof(Tree));
-            Tree* big_tree=malloc(sizeof(Tree));
-            Node* root=malloc(sizeof(Node));
 
             element_to_add1->root=first_to_add;
             element_to_add1->left=NULL;
@@ -485,38 +458,34 @@ Tree* listHuffman(listht* lis,Tree* tree){
             big_tree->left=element_to_add1;
             big_tree->right=element_to_add2;
 
-            root->val=0;
-            root->occ=current->occ+current->next->occ;
-            root->next=NULL;
-
-            big_tree->root=root;
-            tree=big_tree;
-
-            lis->tail->next=malloc(sizeof(Node));
-            lis->tail->next=root;
-            lis->tail=root;
-
-            suppress_Node(&lis->head,first_to_add);
-            suppress_Node(&lis->head,second_to_add);
-
-            sort_list_by_ref(lis);
-
-            //DisplayListht(lis);
-            displayList(lis->head);
-
-            current=lis->head;
-
           }
-
         }
 
+        root->val=0;
+        root->occ=current->occ+current->next->occ;
+        root->next=NULL;
 
+        big_tree->root=root;
+        *tree=big_tree;
+        add_node_tree(&equiv,root,big_tree);
 
+        lis->tail->next=malloc(sizeof(Node));
+        lis->tail->next=root;
+        lis->tail=root;
 
-        }
+        suppress_Node(&lis->head,current);
+        suppress_Node(&lis->head,current->next);
+
+        sort_list_by_ref(lis);
+
+        current=lis->head;
       }
 
-    return tree ;
+
+      }
+
+     return *tree ;
+
 
 }
 
@@ -524,13 +493,41 @@ void show_huffman(Tree* tree){
 
   if(tree){
     printf("value of node: %d\n",tree->root->occ);
-
     show_huffman(tree->left);
     show_huffman(tree->right);
-
   }
 }
 
+char* appendCharToCharArray(char* array, char a)
+{
+    size_t len = strlen(array);
+    char* ret =malloc(sizeof(char));
+    strcpy(ret, array);
+    ret[len] = a;
+    ret[len+1] = '\0';
+
+    return ret;
+}
+
+// char* Huffman(Tree* tree,int el){
+//   static char* result"";
+//   static int el=0;
+//   if(tree){
+//
+//     if(tree->left->root->occ==el) result=appendCharToCharArray(result,'0');
+//     else
+//     if(tree->right->root->occ==el) result=appendCharToCharArray(result,'1');
+//
+//
+//   }
+
+  return result;
+  }
+
+
+
+
+}
 
 
 
@@ -564,22 +561,18 @@ int main() {
   insert_element(&l,8);
   insert_element(&l,8);
   insert_element(&l,45);
-
-
-  displayList(l);
   // make a list structre with head and tail
   lis=transform(l);
-  //displayList(lis->head);
-  // display the head-and-tail-based list vertically
-  // DisplayListht(lis);
 
   sort_list_by_ref(lis);
+
+  //display the list of caracters + occurences
   displayList(lis->head);
 
-
   Tree* tree;
-  tree=listHuffman(lis,tree);
-  //show_huffman(tree);
+  listHuffman(lis,&tree);
+  show_huffman(tree);
+
 
   return 0;
 }
