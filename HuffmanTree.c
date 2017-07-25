@@ -409,7 +409,6 @@ void listHuffman(listht* lis,Tree** tree){
             first_to_add->right=NULL;
 
             big_tree->left=find_tree(equiv,current);
-            printf("fuck %d\n",big_tree->left->root->occ);
             big_tree->right=first_to_add;
 
           }
