@@ -1,3 +1,10 @@
+/*
+
+Huffman coding
+__@author__ = Tarek Samaali
+
+*/
+
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -9,33 +16,45 @@
 #include <string.h>
 
 typedef struct Node{
+
     int val ;
     int occ ;
     struct Node* next ;
-    
+
 }Node;
 
+typedef struct Code_Node{
+  char* code;
+  struct Code_Node* next;
+}Code_Node ;
 
 typedef Node* list;
 
+
 typedef struct tree{
+
   struct Node* root ;
   struct tree* left;
   struct tree* right;
+
 }Tree;
 
 
 typedef struct list{
+
     list head;
     list tail;
 
 }listht ; // list with head and tail
 
 typedef struct equival{
+
   struct Node* nodeattr;
   struct Tree* treeattr;
   struct equival* next;
+
 }Equival;
+
 
 
 void insert_element(list** l,int el){
@@ -45,6 +64,7 @@ void insert_element(list** l,int el){
       current->val=el ;
       current->occ=1 ;
       current->next=NULL ;
+      //current->previous=NULL ;
       *l=current ;
       printf("First element added successfully ..  \n\n");
     }
@@ -61,7 +81,9 @@ void insert_element(list** l,int el){
             break;
           }
 
+          //else{
           current=current->next ;
+          //}
         }
 
         if(el==current->val && !change){
@@ -75,13 +97,16 @@ void insert_element(list** l,int el){
             new_current->val=el;
             new_current->occ=1 ;
             new_current->next=NULL ;
+            //new_current->previous=current ;
             current->next=new_current;
+
 
       }
     }
   }
 
 }
+
 
 void display_surroundings(list* l){
   list current=*l;
@@ -107,6 +132,7 @@ void sort_list_by_values(list *l){
 
     while(current->next ){
       list crawler=current->next;
+
       while(crawler){
 
         if(crawler->occ<current->occ){
@@ -119,7 +145,6 @@ void sort_list_by_values(list *l){
         crawler->val=current->val;
         current->val=tmp_val;
 
-
         }
         crawler=crawler->next ;
 
@@ -129,8 +154,7 @@ void sort_list_by_values(list *l){
 }
 
 
-
-
+  /*swap two nodes within a linked list using inly their references*/
     void swap_Node(Node** first,Node** second,Node** l)
         {
 
@@ -217,6 +241,7 @@ void DisplayListht(listht *listp){
     printf("\n");
   }
 
+/*Transform a list to head-and-tail-based list */
 listht* transform(list l){
 
   listht* listp=malloc(sizeof(listht));
@@ -240,12 +265,12 @@ displayNode(Node* l){
 
 }
 
+/*Sorting a linked list using only the references of the elements (only pointers) */
 void sort_list_by_ref(listht *l){
 
 
           Node* current=l->head;
           Node* departure=current;
-          printf("now \n");
           if(!current->next){}
           else if(!current->next->next){
 
@@ -279,8 +304,8 @@ void sort_list_by_ref(listht *l){
 
             l->head=departure;
             l->tail=tail_fix;
-            printf("%d\n",l->head->occ);
-            printf("%d\n",l->tail->occ);
+            //printf("%d\n",l->head->occ);
+            //printf("%d\n",l->tail->occ);
 
             }
         }
@@ -309,6 +334,7 @@ Tree* find_tree(Equival* equiv, Node* node){
 
 }
 
+
 void add_node_tree(Equival** equiv, Node* node,Tree* tree){
 
    if(*equiv==NULL){
@@ -330,9 +356,6 @@ void add_node_tree(Equival** equiv, Node* node,Tree* tree){
    current->next->treeattr=tree;
    current->next->next=NULL;
  }
-
-
-  // return equiv;
 
 }
 
@@ -362,6 +385,7 @@ else
 }
 
 
+/* build the huffman tree*/
 void listHuffman(listht* lis,Tree** tree){
     list current=lis->head;
     Equival *equiv={0};
@@ -465,7 +489,9 @@ void listHuffman(listht* lis,Tree** tree){
         sort_list_by_ref(lis);
 
         current=lis->head;
-        }
+      }
+
+
       }
 
      return *tree ;
@@ -473,6 +499,7 @@ void listHuffman(listht* lis,Tree** tree){
 
 }
 
+/*display the elements of Huffman Tree in order */
 void show_huffman(Tree* tree){
 
   if(tree){
@@ -482,22 +509,156 @@ void show_huffman(Tree* tree){
   }
 }
 
-char* appendCharToCharArray(char* array, char a)
-{
-    size_t len = strlen(array);
-    char* ret =malloc(sizeof(char));
-    strcpy(ret, array);
-    ret[len] = a;
-    ret[len+1] = '\0';
 
-    return ret;
+/*find the parent of a node within the Huffman tree*/
+Tree* look_for_parent(Tree *p,Tree* orphan){
+  static Tree* output={0};
+
+  if(p!=orphan)
+  {
+    if (!p)
+      {
+        return;
+    }
+
+  if(p->left==orphan) output=p;
+    else
+  if(p->right==orphan) output=p;
+
+  look_for_parent(p->left,orphan);
+  look_for_parent(p->right,orphan);
+
+  return output;
+
+    }else{
+  return p ;
 }
 
 
+}
+
+/*search for a particular element in the tree */
+Tree* in_order_search(Tree *p, int val)
+{
+    static Tree* output;
+    if (!p)
+    {
+        return;
+    }
+    in_order_search(p->left, val);
+    if(p->root->val == val)
+    {
+
+        output=p;
+
+    }
+    in_order_search(p->right, val);
+
+    return output;
+}
+
+char* build_caracter_huffman(Tree* root,Tree* start){
+  if(look_for_parent(root,start)->right==start)
+    return "1";
+  else if (look_for_parent(root,start)->left==start)
+    return "0";
+
+}
+
+/*append a char array to another*/
+char* apprend(char *a,char *b)
+{
+  char *out;
+  if((out = (char *)malloc(strlen(a) + strlen(b) + 1)) != NULL)
+  {
+   strcpy(out, a);
+   strcat(out, b);
+ }
+ else{};
+  return out;
+}
+
+/* Applying the huffman coding procedure to code the integer values */
+char* codehuffman(Tree* tree,int val)
+{
+  char* output="";
+  Tree* start=in_order_search(tree,val);
+  while (start!=look_for_parent(tree,start)) {
+    output=apprend(build_caracter_huffman(tree,start),output);
+    start=look_for_parent(tree,start);
+  }
+
+  return output;
+}
+
+/*We build a list of coded elements at this stage*/
+void add_code(Code_Node **code_list, char* el){
+
+   Code_Node* current=*code_list;
+   if(current==NULL){
+     current=malloc(sizeof(Code_Node));
+     current->code=el;
+     current->next=NULL;
+     *code_list=current;
+   }
+   else{
+     while(current->next) current=current->next;
+     current->next=malloc(sizeof(Code_Node));
+     current=current->next;
+     current->code=el;
+     current->next=NULL;
+   }
+}
+
+/*code all the tree elements */
+Code_Node* build_all_huffman(Tree* tree,Tree* root){
+
+  static Code_Node* code_list;
+
+  if(!tree){}
+  else{
+
+  if(tree->root->val)
+      {
+      int val =tree->root->val;
+      char* code=codehuffman(root,val);
+      add_code(&code_list,code);
+      printf("Value: %6d |   Huffman code: %s \n",val,code);
+    }
+  build_all_huffman(tree->left,root);
+  build_all_huffman(tree->right,root);
+
+  }
+  return code_list;
+}
+
+/*decode an element*/
+Tree* decodehuffman(char* code,Tree* root){
+   Tree* start=root;
+   int counter=0;
+
+   while(*(code+counter)){
+     if (*(code+counter)=='1') start=start->right;
+     if (*(code+counter)=='0') start=start->left;
+     counter++;
+   }
+   return start ;
+}
+
+void decode_all_huffman(Code_Node* listcode, Tree* root){
+    //Code_Node* current=listcode;
+    if(listcode){
+      printf("Huffman code: %8s | Value: %6d \n",listcode->code,decodehuffman(listcode->code,root)->root->val);
+      decode_all_huffman(listcode->next,root);
+    }
+
+}
 
 int main() {
   list *l=NULL;
   listht* lis=NULL;
+  Tree* tree;
+  Code_Node* list_code;
 
   insert_element(&l,11);
   insert_element(&l,11);
@@ -516,7 +677,6 @@ int main() {
   insert_element(&l,45);
   insert_element(&l,7);
   insert_element(&l,7);
-  insert_element(&l,175);
   insert_element(&l,8);
   insert_element(&l,8);
   insert_element(&l,14);
@@ -524,18 +684,22 @@ int main() {
   insert_element(&l,8);
   insert_element(&l,8);
   insert_element(&l,45);
-  // make a list structre with head and tail
-  lis=transform(l);
+  insert_element(&l,45);
 
+  // make a list structure with head and tail
+  lis=transform(l);
   sort_list_by_ref(lis);
 
   //display the list of caracters + occurences
-  displayList(lis->head);
-
-  Tree* tree;
   listHuffman(lis,&tree);
-  show_huffman(tree);
 
+  /*main part */
+  printf("%s\n\n","Coding : ");
+  list_code=build_all_huffman(tree,tree);
+  printf("\n\n");
+  printf("%s\n\n","Decoding : ");
+  decode_all_huffman(list_code,tree);
+  printf("\n");
 
-  return 0;
+return 0;
 }
