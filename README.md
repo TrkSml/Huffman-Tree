@@ -9,7 +9,7 @@ user@user:path/to/directory$ make
 
 We managed to make the program accept at least two elements as a starting set to code :
 
-Example:
+The next example :
 
 ```
 user@user:path/to/directory$ ./HuffmanTree 1 7 7 8 9 6 2 2 2 22 2 22
