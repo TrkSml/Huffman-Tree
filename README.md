@@ -7,7 +7,7 @@ user@user:path/to/directory$ make
 
 ```
 
-We managed to make the program accept at least two elements to as starting set to code :
+We managed to make the program accept at least two elements as a starting set to code :
 
 Example:
 
