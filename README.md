@@ -2,11 +2,11 @@
 A small project to create a Huffman-tree-based Encoding-Decoding based on a set of numbers and their frequencies.
 Make command to build the executable program within the project directory:
 
-``
+```
 make
 
 
-``
+```
 
 We managed to make the program accept at least two elements to as starting set to code :
 
