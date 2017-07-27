@@ -4,6 +4,8 @@ Make command to build the executable program within the project directory:
 
 ``
 make
+
+
 ``
 
 We managed to make the program accept at least two elements to as starting set to code :
