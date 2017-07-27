@@ -64,6 +64,7 @@ void insert_element(list** l,int el){
       current->val=el ;
       current->occ=1 ;
       current->next=NULL ;
+      //current->previous=NULL ;
       *l=current ;
       printf("First element added successfully ..  \n\n");
     }
@@ -80,7 +81,9 @@ void insert_element(list** l,int el){
             break;
           }
 
+          //else{
           current=current->next ;
+          //}
         }
 
         if(el==current->val && !change){
@@ -658,58 +661,63 @@ int main(int argc, char** argv) {
   Code_Node* list_code;
 
   int i;
-    
+
   /* add elements using command line arguments */
-  for(i = 1; i < argc; i++)
-    insert_element(&l,atoi(*(argv+i)));
-  printf("\n\n");
+  if(argc<3)
+    printf("%s\n","Error ! At least two elements are expected .. ");
+  else{
+    for(i = 1; i < argc; i++)
+      insert_element(&l,atoi(*(argv+i)));
+    printf("\n\n");
 
- /*uncomment to add elements manually*/
+   /*uncomment to add elements manually*/
 
-  // insert_element(&l,11);
-  // insert_element(&l,11);
-  // insert_element(&l,1123);
-  // insert_element(&l,743);
-  // insert_element(&l,879);
-  // insert_element(&l,23);
-  // insert_element(&l,729);
-  // insert_element(&l,7);
-  // insert_element(&l,7);
-  // insert_element(&l,7);
-  // insert_element(&l,7);
-  // insert_element(&l,5);
-  // insert_element(&l,11);
-  // insert_element(&l,45);
-  // insert_element(&l,45);
-  // insert_element(&l,7);
-  // insert_element(&l,7);
-  // insert_element(&l,8);
-  // insert_element(&l,8);
-  // insert_element(&l,14);
-  // insert_element(&l,14);
-  // insert_element(&l,8);
-  // insert_element(&l,8);
-  // insert_element(&l,45);
-  // insert_element(&l,45);
+    // insert_element(&l,11);
+    // insert_element(&l,11);
+    // insert_element(&l,1123);
+    // insert_element(&l,743);
+    // insert_element(&l,879);
+    // insert_element(&l,23);
+    // insert_element(&l,729);
+    // insert_element(&l,7);
+    // insert_element(&l,7);
+    // insert_element(&l,7);
+    // insert_element(&l,7);
+    // insert_element(&l,5);
+    // insert_element(&l,11);
+    // insert_element(&l,45);
+    // insert_element(&l,45);
+    // insert_element(&l,7);
+    // insert_element(&l,7);
+    // insert_element(&l,8);
+    // insert_element(&l,8);
+    // insert_element(&l,14);
+    // insert_element(&l,14);
+    // insert_element(&l,8);
+    // insert_element(&l,8);
+    // insert_element(&l,45);
+    // insert_element(&l,45);
 
-  // make a list structure with head and tail
-   lis=transform(l);
-   sort_list_by_ref(lis);
-  
-  // //display the list of caracters + occurences
-  listHuffman(lis,&tree);
-  //
+    // make a list structure with head and tail
+     lis=transform(l);
+     sort_list_by_ref(lis);
+
+    // //display the list of caracters + occurences
+    listHuffman(lis,&tree);
+    //
+
+    /*main part */
+    /* Coding */
+    printf("%s\n\n","Coding : ");
+    list_code=build_all_huffman(tree,tree);
+    printf("\n\n");
+
+    /*Decoding*/
+    printf("%s\n\n","Decoding : ");
+    decode_all_huffman(list_code,tree);
+    printf("\n");
     
-  /*main part */
-  /* Coding */
-  printf("%s\n\n","Coding : ");
-  list_code=build_all_huffman(tree,tree);
-  printf("\n\n");
-    
-  /*Decoding*/
-  printf("%s\n\n","Decoding : ");
-  decode_all_huffman(list_code,tree);
-  printf("\n");
+}
 
 return 0;
 }
