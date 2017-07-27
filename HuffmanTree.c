@@ -661,9 +661,9 @@ int main(int argc, char** argv) {
   Code_Node* list_code;
 
   int i;
-
+    
+  /* add elements using command line arguments */
   for(i = 1; i < argc; i++)
-    //printf("%d | ", atoi(*(argv+i)));
     insert_element(&l,atoi(*(argv+i)));
   printf("\n\n");
 
@@ -698,16 +698,18 @@ int main(int argc, char** argv) {
   // make a list structure with head and tail
    lis=transform(l);
    sort_list_by_ref(lis);
-  //
+  
   // //display the list of caracters + occurences
   listHuffman(lis,&tree);
   //
+    
   /*main part */
   /* Coding */
   printf("%s\n\n","Coding : ");
   list_code=build_all_huffman(tree,tree);
   printf("\n\n");
-  /*decoding*/
+    
+  /*Decoding*/
   printf("%s\n\n","Decoding : ");
   decode_all_huffman(list_code,tree);
   printf("\n");
