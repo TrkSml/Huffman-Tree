@@ -12,9 +12,9 @@ Example:
 
 ``
 ./HuffmanTree 1 7 7 8 9 6 2 2 2 22 2 22
-
 ``
 would give the next output :
+
 
 ``
 Coding : 
@@ -37,6 +37,5 @@ Huffman code:      011 | Value:      8
 Huffman code:       10 | Value:      2 
 Huffman code:      110 | Value:     22 
 Huffman code:      111 | Value:      6 
-
 ``
 
