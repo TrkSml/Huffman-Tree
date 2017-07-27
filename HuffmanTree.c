@@ -64,7 +64,6 @@ void insert_element(list** l,int el){
       current->val=el ;
       current->occ=1 ;
       current->next=NULL ;
-      //current->previous=NULL ;
       *l=current ;
       printf("First element added successfully ..  \n\n");
     }
@@ -81,9 +80,7 @@ void insert_element(list** l,int el){
             break;
           }
 
-          //else{
           current=current->next ;
-          //}
         }
 
         if(el==current->val && !change){
